@@ -11,16 +11,17 @@ html{
 }
 
 body{    
-     background-image: url(../img/Background.jpg);     
+     background-image: url(../img/Background.jpg);    
+     background-size: 150%; 
     min-height: 90vh;
     
     /* overflow-x: hidden; */
     font-family: 'Roboto', sans-serif;
-    -webkit-transition: all 1s ease-in-out;
+    /* -webkit-transition: all 1s ease-in-out;
     -moz-transition: all 1s ease-in-out;
     -o-transition: all 1s ease-in-out;
     -ms-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;    
+    transition: all 1s ease-in-out;     */
 }
 
 
@@ -62,7 +63,7 @@ label{
     margin-right: 1%;
 }
 
-div{
+.tarjeta{
     font-size: 1.3rem;
     border: 1px solid black;
     color:rgb(55, 18, 88);
@@ -178,7 +179,7 @@ table tbody tr{
     background-color: var(--transparent2);
 }
 
-#main h1,#three h2{
+#main h1, .swal2-popup h2, #reloj30secs{
     animation: zoomIn 3s;
     animation-iteration-count: infinite;   
 }
@@ -186,6 +187,7 @@ table tbody tr{
 section{
     text-align: center;
 }
+
 
 
 @keyframes zoomIn{
@@ -206,7 +208,7 @@ section{
 
 }
 
-h2,h3,li{
+.tarjeta h2, .tarjeta h3, li, article h2{
     color: white;
     background-color: var(--transparent2);
 }
@@ -215,7 +217,7 @@ h2,h3,p{
     text-align: center;    
 }
 
-#three h2{
+#four h2, #reloj30secs{
     background: none;
 }
 
@@ -230,7 +232,7 @@ input[type=text]{
     display: block;
 }
 
-#three h2{
+#four h2, #reloj30secs{
     color: black;
 }
 
@@ -248,3 +250,16 @@ p{
     color: white;
     margin-bottom: 0;
 }
+
+@media (max-width:730px) {
+    body{
+    background-size: 500%;
+    }
+ }
+
+ /*
+@media (max-width:5px) {
+    body{
+    background-size: 500%;
+    }
+} */

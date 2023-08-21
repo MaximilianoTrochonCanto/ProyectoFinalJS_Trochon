@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <link rel="stylesheet" href="css/estilos.css">    
-    <script defer src="js/codigo.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script type="module" defer src="js/codigo.js"></script>    
     <title>Adivina adivinador</title>
 
 </head>
@@ -15,17 +16,18 @@
 
         <section id="main">
             <h1>Adivina adivinador.</h1>
-        <div>
+        <div class="tarjeta">
             <p>Modo de Juego:</p>
-            <input type="button" value="5 intentos" id="singlePlayer" class="boton">
-            <input type="button" value="Contrrareloj" id="reloj"> 
+            <input type="button" value="5 intentos" id="singlePlayer" class="boton">            
+            <input type="button" value="Contra reloj" id="reloj">             
             <input type="button" value="1 vs 1" id="vsBtn"> 
+
         </div>
         <img src="./img/giphy.gif" alt="">
     </section>
     <section id="one">        
         <h1>5 chances para adivinar el numero.</h1>
-        <div>
+        <div class="tarjeta">
             <label for="numero">Ingresa un numero del 1 al 100</label>
             <input type="number" id="numero" >
             <input type="button" value="Ingresar" id="boton">
@@ -40,13 +42,13 @@
     <section id="two">
        
         <h1>Quien adivine antes gana!</h1>
-        <div>
+        <div class="tarjeta">
             <label for="tuNumero">Ingresa un numero del 1 al 20</label>
             <input type="number" id="tuNumero" >
             <input type="button" value="Ingresar" id="botonVs">
             <p id="numerosElegidosVictoriasTu"></p>        
         </div>
-        <div>
+        <div class="tarjeta">
             <p>Respuesta de tu rival: <span id="respuestaRival"></span></p>
             <p id="numerosElegidosVictoriasRival"></p>
         </div>
@@ -57,12 +59,12 @@
         </article> 
     </section>      
     <section id="three">
-        <h1>Tenes 20 segundos!</h1>
-        <div>
-            <h2 id="reloj20secs">20.0000</h2>
+        <h1>Tenes 30 segundos!</h1>
+        <div class="tarjeta">
+            <h2 id="reloj30secs">20.0000</h2>
             <label for="numeroClock">Ingresa un numero del 1 al 50:</label>
-            <input type="number" id="numeroClock" name="numeroClock">
-            <input type="button" value="Ingresar" id="btnClock">
+            <input type="number" id="numeroClock" name="numeroClock">                            
+            <input type="button" value="Ingresar" id="btnClock">            
             <p id="numerosElegidosClock"></p>
         </div>
         <p class="mensajeResultado"></p>
@@ -71,20 +73,7 @@
             <h2></h2>
         </article>
     </section>
-    <section id="four">
-        <p id="parrafoV">Felicidades <span id="tuNombre"></span>! Ganaste la partida.</p>
-        <p id="errorIngreso"></p>
-        <div>
-            <form>    
-                <h2>Presentate!</h2>            
-                <input type="text" id="txtNombre" placeholder="Como te llamas?">
-                <input type="text" id="txtProcedencia" placeholder="De donde sos?">
-                <input type="text" id="txtEmail" placeholder="Escribi tu correo">
-                
-                <input type="button" value="Ingresar" id="btnIngresarJugador">
-            </form>
-        </div>
-    </section>       
+    
     </main>    
 </body>
 </html>
