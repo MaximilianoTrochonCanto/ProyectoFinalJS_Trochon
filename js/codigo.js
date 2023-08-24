@@ -1,4 +1,4 @@
-import { $, tag } from "./libreria.js";
+import { $, tag, llamarToast, mostrarAlertSwal ,volverInicioSwal} from "./librerias.js";
 
 
 //#region Variables
@@ -23,7 +23,6 @@ let chances;
 let refresca;
 let textoNumerosElegidos;
 let tiempoInicial;
-llamarFetch();
 let parrafosMensaje = document.getElementsByClassName("mensajeResultado")
 let countdown = $("reloj30secs")
 let modo;
@@ -62,12 +61,7 @@ function ingresarNumeroContrarreloj() {
     if (numeroIngresado <= 50 && numeroIngresado > 0)
         (numeroIngresado == ganador) ? correctoReloj() : incorrectoReloj(numeroIngresado)
     else {
-        parrafosMensaje[2].innerHTML = "El número debe estar entre 1 y 50."
-        parrafosMensaje[2].classList.add("pError")
-        setTimeout(() => {
-            parrafosMensaje[2].classList.remove("pError");
-            parrafosMensaje[2].innerHTML = "";
-        }, 2000)
+        llamarToast("El número debe estar entre 1 y 50.","error")        
     }
     $("numerosElegidosClock").innerHTML = textoNumerosElegidos + [...numerosElegidos]
 }
@@ -84,45 +78,88 @@ function incorrectoReloj(numeroIngresado) {
 
 
 
-const esconderSecciones = function () {
-    $("one").style.display = "none"
-    $("two").style.display = "none"
-    $("three").style.display = "none"
-    $("main").style.display = "block"
-
+export const inicio = function () {
+    esconderSecciones()
+    mostrarSeccion("main")    
+    numerosElegidosRival,numerosElegidos = []
+    llamarFetch()
+    $("backB").style.display = "none"
+    
+    resetHTML()
 }
 
-esconderSecciones();
+function resetHTML(){
+    for(let i = 0;i < document.getElementsByClassName("tarjeta").length;i++){
+        document.getElementsByClassName("tarjeta")[i].classList.remove("diverror")
+    }
+    $("body").classList.remove("derrota")
+    $("body").classList.remove("victoria")
+    for(let i = 0; i < document.getElementsByTagName("input").length;i++)
+    tag(document,"input",i).innerHTML = "";
+    for(let i = 0;i<document.getElementsByClassName("table-responsive-lg").length;i++){
+    document.getElementsByClassName("table-responsive-lg")[i].innerHTML = ""
+    document.getElementsByClassName("table-responsive-lg")[i].classList.remove("border")
+    }
+    $("botonVs").disabled = false;
+    $("btnClock").disabled = false;
+    $("boton").disabled = false
+    for(let i = 0;i<document.getElementsByClassName("mensajeResultado").length;i++)
+    document.getElementsByClassName("mensajeResultado")[i].innerHTML = ""
+    $("numerosElegidosIntentos").innerHTML = ""
+    $("numerosElegidosVictoriasTu").innerHTML = ""
+    $("numerosElegidosClock").innerHTML = ""
+    $("respuestaRival").innerHTML = ""
+}
 
-$("singlePlayer").addEventListener("click", singlePlayer)
-$("vsBtn").addEventListener("click", vsBtn)
-$("reloj").addEventListener("click", contrarreloj)
+
+
+
+const mostrarSeccion = (id) => $(id).style.display = "block"
+
+inicio();
+
+$("btnSeccionIntentos").addEventListener("click", singlePlayer)
+$("btnSeccionVictorias").addEventListener("click", vsBtn)
+$("btnSeccionContrarreloj").addEventListener("click", contrarreloj)
 
 function singlePlayer() {
-    $("main").style.display = "none";
-    $("one").style.display = "block";
-    $("three").style.display = "none";
+    esconderSecciones()
+    mostrarSeccion("s"+this.getAttribute("id").substring(4,this.length))
+    mostrarSeccion("backB")
     ganador = 94
     //Math.floor(Math.random() * 100) + 1;
     console.log(ganador)
     modo = "intentos"
 }
 
+function esconderSecciones(){
+    for(let s = 0;s < 4;s++)
+        tag(document,"section",s).style.display = "none"
+    
+    
+}
 
 
 function vsBtn() {
-    $("main").style.display = "none"
-    $("two").style.display = "block"
-    $("three").style.display = "none"
+    esconderSecciones()
+    mostrarSeccion("s"+this.getAttribute("id").substring(4,this.length))
+    mostrarSeccion("backB")
+    llamarApiUsuariosRandom()
     ganador = Math.floor(Math.random() * 20) + 1;
     modo = "victorias"
     console.log(ganador)
 }
 
+const volver = _ => volverInicioSwal()
+
+$("volver").addEventListener("click",volver)
+
+
+
 function contrarreloj() {
-    $("main").style.display = "none"
-    $("two").style.display = "none"
-    $("three").style.display = "block"
+    esconderSecciones()
+    mostrarSeccion("s"+this.getAttribute("id").substring(4,this.length))
+    mostrarSeccion("backB")
     ganador = Math.floor(Math.random() * 50) + 1;
     modo = "contrarreloj"
     empezarReloj()
@@ -136,6 +173,8 @@ function crearCabezal() {
     if (modo == "contrarreloj") retorno = "Tiempo record";
     return retorno;
 }
+
+
 
 function crearLinks(top5) {
     let li1 = document.createElement("li");
@@ -192,7 +231,7 @@ function mostrarIngreso(error, textoError) {
 
     (async () => {
         const { value: formValues } = await Swal.fire({
-            title: "Presentate!",
+            title: "Ganaste! Ingresa tus datos",
             confirmButtonText: 'Ingresar',
             allowOutsideClick: false,
             html: htmlForm
@@ -212,23 +251,6 @@ function mostrarIngreso(error, textoError) {
 
 
 
-
-function mostrarAlertSwal(texto, victoria) {
-    let titulo;
-    let imagen;
-    if (victoria) {
-        titulo = "Felicidades " + nombreJugador + "!";
-        imagen = 'success';
-    } else {
-        titulo = "Oops"
-        imagen = 'error'
-    }
-    Swal.fire({
-        icon: imagen,
-        title: titulo,
-        text: texto,
-    })
-}
 
 
 
@@ -277,15 +299,7 @@ function consultarJugadorNuevo() {
             }
         }
         sincronizarStorage();
-
-
-        if (modo == "contrarreloj") {
-            $("main").style.display = "none"
-            $("two").style.display = "none"
-            $("three").style.display = "block"
-
-        } else
-            (modo == "intentos") ? singlePlayer() : vsBtn()
+      
         tuResultado(true, `Felicidades ${jugadorNuevo.nombre}, ganaste el partido! `);
     }
 }
@@ -297,6 +311,29 @@ function validarMail(email) {
     return email.match(chars)
 }
 
+
+async function getApi(){
+    const res = await fetch('https://randomuser.me/api/')
+    //const res = await fetch('https://pokeapi.co/api/v2/pokemon/')
+    const data = res.json();
+    return data;
+}
+
+async function llamarApiUsuariosRandom(){
+    const user = await getApi();
+    convertirUsuario(user)
+}
+
+    
+
+function convertirUsuario(user){
+    console.log(user.results[0])
+     $("rivalNombre").innerHTML = user.results[0].name.first + " " + user.results[0].name.last;
+     $("rivalCorreo").innerHTML = user.results[0].email;
+     $("rivalProcedencia").innerHTML = user.results[0].location.city;
+    //("",user.results[0].picture.large)
+   $("rivalImagen").setAttribute("src",user.results[0].picture.large);
+}
 
 
 function ordenarJugadores() {
@@ -349,9 +386,9 @@ function numeroIncorrecto(numero) {
     div.classList.remove("diverror")
     div.offsetWidth;
     div.classList.add("diverror")
-    if (modo == "intentos") div.onanimationend = () => parrafosMensaje[0].innerHTML = "Incorrecto, te quedan " + (chances - intentos) + " chances. Pista: " + pistaNumero(numero, chances - intentos)
-    else if (modo == "victorias") div.onanimationend = () => parrafosMensaje[1].innerHTML = "Sigan participando";
-    else div.onanimationend = () => parrafosMensaje[2].innerHTML = pistaNumero(numero, 0);
+    if (modo == "intentos") div.onanimationend = () => llamarToast("Incorrecto, te quedan " + (chances - intentos) + " chances. Pista: " + pistaNumero(numero, chances - intentos),"pista")
+    else if (modo == "victorias") div.onanimationend = () => llamarToast("Sigan participando","pista")
+    else div.onanimationend = () => parrafosMensaje[2].innerHTML = llamarToast(pistaNumero(numero, 0),"pista")
 
 
 }
@@ -365,14 +402,9 @@ $("numero").addEventListener("keyup", function (evt) {
 function ingresarNumero() {
     let numero = Number($("numero").value);
     $("numero").value = "";
-    if (numero > 100 || numero < 1) {
-        parrafosMensaje[0].innerHTML = "El número debe estar entre 1 y 100."
-        parrafosMensaje[0].classList.add("pError")
-        setTimeout(() => {
-            parrafosMensaje[0].classList.remove("pError");
-            parrafosMensaje[0].innerHTML = "";
-        }, 3000)
-    } else {
+    if (numero > 100 || numero < 1) 
+        llamarToast("El número debe estar entre 1 y 100.","error")        
+     else {
         numerosElegidos.push(numero)
         $("numerosElegidosIntentos").innerHTML = textoNumerosElegidos + [...numerosElegidos]
         for (let i = 0; i <= chances; i++) {
@@ -405,25 +437,20 @@ $("numeroClock").addEventListener("keyup", function (evt) {
 function ingresarNumeroVs() {
     let tuNumero = Number($("tuNumero").value);
     $("tuNumero").value = "";
-    if (tuNumero > 20 || tuNumero < 1) {
-        parrafosMensaje[1].innerHTML = "El número debe estar entre 1 y 20."
-        parrafosMensaje[1].classList.add("pError")
-        setTimeout(() => {
-            parrafosMensaje[1].classList.remove("pError");
-            parrafosMensaje[1].innerHTML = "";
-        }, 3000)
-    } else {
+    if (tuNumero > 20 || tuNumero < 1) 
+        llamarToast("El número debe estar entre 1 y 20.","error")        
+     else {
         numerosElegidos.push(tuNumero)
         if (!Boolean(ganasteTu ^ ganoRival)) {
             while (!noEsta(numeroRival, numerosElegidosRival) || !noEsta(numeroRival, numerosElegidos)) {
                 numeroRival = Math.floor(Math.random() * 20) + 1;
             }
             $("numerosElegidosVictoriasTu").innerHTML = textoNumerosElegidos + [numerosElegidos]
-            $("respuestaRival").innerHTML = ` ${numeroRival}`
             ganasteTu = consultarNumero(tuNumero)
             ganoRival = consultarNumero(numeroRival)
             numerosElegidosRival.push(numeroRival)
-            $("numerosElegidosVictoriasRival").innerHTML = textoNumerosElegidos + [...numerosElegidosRival]
+            $("respuestaRival").innerHTML = ` ${[numerosElegidosRival]}`
+            //$("numerosElegidosVictoriasRival").innerHTML = textoNumerosElegidos + [...numerosElegidosRival]
         }
 
 
@@ -562,6 +589,7 @@ function parrafoListaVacia(elemento) {
     p.textContent = "No hubo ningun ganador hoy"
     elemento.appendChild(p);
 }
+
 
 function llamarFetch() {
         

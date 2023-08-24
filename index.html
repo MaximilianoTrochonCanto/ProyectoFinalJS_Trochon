@@ -4,63 +4,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/estilos.css">    
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script type="module" defer src="js/codigo.js"></script>    
     <title>Adivina adivinador</title>
 
 </head>
 
 <body id="body">
+    <div id="volver">        
+        <img id="backB" src="./img/whitebutton.png" alt="">
+    </div>
     <main>
 
-        <section id="main">
+        <section id="main" class="container">
             <h1>Adivina adivinador.</h1>
-        <div class="tarjeta">
+        <div class="tarjeta col-9">
             <p>Modo de Juego:</p>
-            <input type="button" value="5 intentos" id="singlePlayer" class="boton">            
-            <input type="button" value="Contra reloj" id="reloj">             
-            <input type="button" value="1 vs 1" id="vsBtn"> 
+            <input type="button" value="5 intentos" id="btnSeccionIntentos" class="boton">            
+            <input type="button" value="Contra reloj" id="btnSeccionContrarreloj">             
+            <input type="button" value="1 vs 1" id="btnSeccionVictorias"> 
 
         </div>
         <img src="./img/giphy.gif" alt="">
     </section>
-    <section id="one">        
+    <section id="seccionIntentos">        
         <h1>5 chances para adivinar el numero.</h1>
-        <div class="tarjeta">
+        <div class="tarjeta col-9">
             <label for="numero">Ingresa un numero del 1 al 100</label>
             <input type="number" id="numero" >
             <input type="button" value="Ingresar" id="boton">
             <p id="numerosElegidosIntentos"></p>
         </div>  
         <p class="mensajeResultado"></p>        
-        <article id="tablaIntentos">
+        <article class="table-responsive-lg" id="tablaIntentos">
             <ul></ul>
             <h2></h2>
         </article>                        
     </section>
-    <section id="two">
+    <section id="seccionVictorias">
        
         <h1>Quien adivine antes gana!</h1>
-        <div class="tarjeta">
+        <div class="tarjeta col-9">
             <label for="tuNumero">Ingresa un numero del 1 al 20</label>
             <input type="number" id="tuNumero" >
             <input type="button" value="Ingresar" id="botonVs">
             <p id="numerosElegidosVictoriasTu"></p>        
         </div>
-        <div class="tarjeta">
-            <p>Respuesta de tu rival: <span id="respuestaRival"></span></p>
-            <p id="numerosElegidosVictoriasRival"></p>
+        <div class="tarjeta" >
+            <article id="rival">
+                <div>
+                    <img src="" id="rivalImagen"> 
+                </div>
+                <div>
+                    <p> Nombre: <span id="rivalNombre"></span> </p>
+                    <p>Correo: <span id="rivalCorreo"></span></p>
+                    <p>Procedencia: <span id="rivalProcedencia"></span></p>
+                </div>
+            </article>
+            <p>Respuestas de tu rival: <span id="respuestaRival"></span></p>            
         </div>
         <p class="mensajeResultado"></p>
-        <article id="tablaVs">
+        <article class="table-responsive-lg" id="tablaVs">
             <ul></ul>
             <h2></h2>
         </article> 
     </section>      
-    <section id="three">
+    <section id="seccionContrarreloj">
         <h1>Tenes 30 segundos!</h1>
-        <div class="tarjeta">
+        <div class="tarjeta col-9">
             <h2 id="reloj30secs">20.0000</h2>
             <label for="numeroClock">Ingresa un numero del 1 al 50:</label>
             <input type="number" id="numeroClock" name="numeroClock">                            
@@ -68,7 +83,7 @@
             <p id="numerosElegidosClock"></p>
         </div>
         <p class="mensajeResultado"></p>
-        <article id="tablaTiempo">
+        <article class="table-responsive-lg" id="tablaTiempo">
             <ul></ul>
             <h2></h2>
         </article>

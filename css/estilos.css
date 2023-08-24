@@ -208,6 +208,35 @@ section{
 
 }
 
+#rival{
+
+    display: flex;
+    
+    padding: 10px;
+}
+
+#rival div p{
+    margin-left: 10px;
+    
+}
+
+#rival span{
+    font-weight: normal;
+}
+
+#rival img{
+    margin-left:50px;
+    width: 140px;
+    height: 140px;
+    border-radius: 100px;
+    border: 1px solid;
+}
+
+#backB{
+    width: 50px;
+    height: 40px;
+}
+
 .tarjeta h2, .tarjeta h3, li, article h2{
     color: white;
     background-color: var(--transparent2);
@@ -244,22 +273,47 @@ p{
 
 
 
-.pError{
-    background-color: rgb(255, 35, 35,.8);
-    text-align: center;
-    color: white;
-    margin-bottom: 0;
-}
 
-@media (max-width:730px) {
+@media (max-width:800px ) and (min-width:380px){
     body{
-    background-size: 500%;
+    background-size: 300%;
+    }
+
+    .derrota, .victoria{
+        background-size: 200%;
+    }
+ }
+@media (max-width:960px ) and (min-width:626px){
+    
+
+    .derrota, .victoria{
+        background-size: 180%;
+        
+    }
+ }
+@media (max-width:625px ){
+    
+
+    .derrota, .victoria{
+        background-size: 300%;
     }
  }
 
- /*
-@media (max-width:5px) {
+ @media (max-width:690px){
+    .table-responsive-lg td,.table-responsive-lg th{
+        column-width: 60px;
+    }
+ }
+ @media (max-width:645px){
+    .table-responsive-lg td,.table-responsive-lg th{
+        column-width: 40%;
+        font-size: 11px;
+    }
+ }
+
+
+@media (max-width:379px) {
     body{
     background-size: 500%;
     }
-} */
+} 
