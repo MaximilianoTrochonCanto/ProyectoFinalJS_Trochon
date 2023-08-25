@@ -20,7 +20,7 @@ var jugadores, numerosElegidosRival = new Array();
 let parrafosMensaje = document.getElementsByClassName("mensajeResultado")
 let countdown = $("reloj30secs")
 let numerosElegidos = [];
-let chances;
+let chances ;
 let refresca;
 let textoNumerosElegidos;
 let tiempoInicial;
@@ -86,8 +86,8 @@ function incorrectoReloj(numeroIngresado) {
 export const inicio = function () {
     esconderSecciones()
     mostrarSeccion("main")    
-    numerosElegidosRival,numerosElegidos = []
-    llamarFetch()
+    numerosElegidosRival,numerosElegidos = []    
+    llamarFetch()    
     $("backB").style.display = "none"
     
     resetHTML()
@@ -106,7 +106,9 @@ function resetHTML(){
     tag(document.getElementsByClassName("table-responsive-lg")[i],"h2",0).textContent = ""
     document.getElementsByClassName("table-responsive-lg")[i].classList.remove("border")
     if(tag(document.getElementsByClassName("table-responsive-lg")[i],"table",0)!=undefined)
-    tag(document.getElementsByClassName("table-responsive-lg")[i],"table",0).textContent = ""    
+    tag(document.getElementsByClassName("table-responsive-lg")[i],"table",0).textContent = ""        
+    if(tag(document.getElementsByClassName("table-responsive-lg")[i],"p",0)!=undefined)
+    tag(document.getElementsByClassName("table-responsive-lg")[i],"p",0).textContent = ""    
     }
     
     $("botonVs").disabled = false;
@@ -118,8 +120,8 @@ function resetHTML(){
     $("numerosElegidosVictoriasTu").innerHTML = ""
     $("numerosElegidosClock").innerHTML = ""
     $("respuestaRival").innerHTML = ""
-}
 
+}
 
 
 
@@ -135,8 +137,8 @@ function singlePlayer() {
     esconderSecciones()
     mostrarSeccion("s"+this.getAttribute("id").substring(4,this.length))
     mostrarSeccion("backB")    
-    Math.floor(Math.random() * 100) + 1;
-    
+    ganador = Math.floor(Math.random() * 100) + 1;
+     
     modo = "intentos"
 }
 
@@ -154,6 +156,7 @@ function vsBtn() {
     mostrarSeccion("backB")
     llamarApiUsuariosRandom()
     ganador = Math.floor(Math.random() * 20) + 1;
+     
     modo = "victorias"
     
 }
@@ -179,6 +182,7 @@ function contrarreloj() {
     mostrarSeccion("s"+this.getAttribute("id").substring(4,this.length))
     mostrarSeccion("backB")
     ganador = Math.floor(Math.random() * 50) + 1;
+     
     modo = "contrarreloj"
     empezarReloj()    
 }
@@ -413,7 +417,7 @@ function ingresarNumero() {
     $("numero").value = "";
     if (numero > 100 || numero < 1) 
         llamarToast("El número debe estar entre 1 y 100.")        
-     else {
+     else {        
         numerosElegidos.push(numero)
         $("numerosElegidosIntentos").innerHTML = textoNumerosElegidos + [...numerosElegidos]
         for (let i = 0; i <= chances; i++) {
@@ -487,6 +491,7 @@ function reiniciarJuego() {
     $("numerosElegidosVictoriasTu").innerHTML = ""
     $("numerosElegidosVictoriasRival").innerHTML = ""
     ganador = Math.floor(Math.random() * 20) + 1;
+        
     parrafosMensaje[1].innerHTML = "Empataron. Comiencen de nuevo!"
 
 }
@@ -615,6 +620,7 @@ function llamarFetch() {
         })
         .then((respuesta) => {         
             chances = respuesta.chances
+            intentos = respuesta.intentos
             textoNumerosElegidos= respuesta.textoNumerosElegidos
             refresca = respuesta.refresca
             tiempoInicial = respuesta.tiempoInicial

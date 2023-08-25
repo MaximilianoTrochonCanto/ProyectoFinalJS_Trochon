@@ -1,5 +1,6 @@
 {
     "chances":"5",
+    "intentos":"0",
     "textoNumerosElegidos" : "Numeros elegidos: ",
     "refresca" : "Si querés volver a jugar, refrescá la página o volve al inicio.",
     "tiempoInicial": "30.3" 
