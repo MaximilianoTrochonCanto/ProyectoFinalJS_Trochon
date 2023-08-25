@@ -6,6 +6,7 @@ let { nombreJugador, procedenciaJugador, emailJugador } = "";
 let ganador, intentos = 0;
 let numeroRival = Math.floor(Math.random() * 20) + 1;
 let tabla = document.createElement('table')
+let parrafo = document.createElement('p')
 let tablaVs = $("tablaVs");
 let tablaIntentos = $("tablaIntentos");
 let tablaContrarreloj = $("tablaTiempo");
@@ -106,9 +107,9 @@ function resetHTML(){
     tag(document.getElementsByClassName("table-responsive-lg")[i],"h2",0).textContent = ""
     document.getElementsByClassName("table-responsive-lg")[i].classList.remove("border")
     if(tag(document.getElementsByClassName("table-responsive-lg")[i],"table",0)!=undefined)
-    tag(document.getElementsByClassName("table-responsive-lg")[i],"table",0).textContent = ""        
+    tag(document.getElementsByClassName("table-responsive-lg")[i],"table",0).remove(tabla)        
     if(tag(document.getElementsByClassName("table-responsive-lg")[i],"p",0)!=undefined)
-    tag(document.getElementsByClassName("table-responsive-lg")[i],"p",0).textContent = ""    
+    tag(document.getElementsByClassName("table-responsive-lg")[i],"p",0).remove(parrafo)
     }
     
     $("botonVs").disabled = false;
@@ -603,11 +604,10 @@ function tuResultado(victoria, texto) {
     }
 }
 
-function parrafoListaVacia(elemento) {
-    let p = document.createElement("p")
-    p.style.color = "white";
-    p.textContent = "No hubo ningun ganador hoy"
-    elemento.appendChild(p);
+function parrafoListaVacia(elemento) {    
+    parrafo.style.color = "white";
+    parrafo.textContent = "No hubo ningun ganador hoy"
+    elemento.appendChild(parrafo);
 }
 
 
