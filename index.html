@@ -21,15 +21,27 @@
     <main>
 
         <section id="main" class="container">
-            <h1>Adivina adivinador.</h1>
-        <div class="tarjeta col-9">
-            <p>Modo de Juego:</p>
-            <input type="button" value="5 intentos" id="btnSeccionIntentos" class="boton">            
+            <h1 class="mt-2">Adivina adivinador.</h1>
+        <div class="tarjeta tarjeta-main row mt-5">
+            <p class="col-12">Modos de Juego:</p>
+            <div class="col-4">
+                <img src="./img/giphy.gif" alt="" id="btnSeccionIntentos">
+                <p>5 intentos</p>
+            </div>
+            <div class="col-4">
+                <img src="./img/vs.gif" alt="" id="btnSeccionVictorias">
+                <p>1 vs 1 </p>
+            </div>
+            <div class="col-4">                
+                <img src="/img/clock.gif" alt="" id="btnSeccionContrarreloj">
+                <p>Contra reloj</p>
+            </div>
+            <!-- <input type="button" value="5 intentos" id="btnSeccionIntentos" class="boton">            
             <input type="button" value="Contra reloj" id="btnSeccionContrarreloj">             
-            <input type="button" value="1 vs 1" id="btnSeccionVictorias"> 
+            <input type="button" value="1 vs 1" id="btnSeccionVictorias">  -->
 
         </div>
-        <img src="./img/giphy.gif" alt="">
+        
     </section>
     <section id="seccionIntentos">        
         <h1>5 chances para adivinar el numero.</h1>
@@ -43,6 +55,7 @@
         <article class="table-responsive-lg" id="tablaIntentos">
             <ul></ul>
             <h2></h2>
+            
         </article>                        
     </section>
     <section id="seccionVictorias">
@@ -71,12 +84,13 @@
         <article class="table-responsive-lg" id="tablaVs">
             <ul></ul>
             <h2></h2>
+            
         </article> 
     </section>      
     <section id="seccionContrarreloj">
         <h1>Tenes 30 segundos!</h1>
         <div class="tarjeta col-9">
-            <h2 id="reloj30secs">20.0000</h2>
+            <h2 id="reloj30secs" >20.0000</h2>
             <label for="numeroClock">Ingresa un numero del 1 al 50:</label>
             <input type="number" id="numeroClock" name="numeroClock">                            
             <input type="button" value="Ingresar" id="btnClock">            
@@ -86,6 +100,7 @@
         <article class="table-responsive-lg" id="tablaTiempo">
             <ul></ul>
             <h2></h2>
+            
         </article>
     </section>
     

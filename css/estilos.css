@@ -95,6 +95,24 @@ input[type=button]{
     transition-duration: 0.3s;
 }
 
+.tarjeta-main{
+    background: var(--transparent);
+    color: white;
+    border-radius: 50px;
+}
+
+#main img{
+    width: 95%;
+    height: 80%;
+    transition-duration: 0.3s;
+}
+
+
+
+#main img:hover{
+    cursor: pointer;
+    scale: 1.05;
+}
 
 input[type="button"]:hover:enabled{
     padding: 1% 2%;
@@ -103,6 +121,20 @@ input[type="button"]:hover:enabled{
 .diverror{
     animation: error 0.4s;
     
+}
+
+
+
+@keyframes timeRunsOutAnim{
+    50%{
+        transform: scale(1.15);
+        color: red;
+    }
+
+    100%{
+        transform: scale(1);
+        color:black
+    }
 }
 
 @keyframes error{
@@ -118,6 +150,11 @@ input[type="button"]:hover:enabled{
     100%{
         transform: translateX(0px);
     }
+}
+
+.timeRunsOut{
+    animation: timeRunsOutAnim 1s !important;
+    animation-iteration-count: infinite !important;    
 }
 
 #top5{

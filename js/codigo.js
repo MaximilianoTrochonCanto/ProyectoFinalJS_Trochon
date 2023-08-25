@@ -3,8 +3,7 @@ import { $, tag, llamarToast, mostrarAlertSwal ,volverInicioSwal} from "./librer
 
 //#region Variables
 let { nombreJugador, procedenciaJugador, emailJugador } = "";
-let ganador = 0;
-let intentos = 0;
+let ganador, intentos = 0;
 let numeroRival = Math.floor(Math.random() * 20) + 1;
 let tabla = document.createElement('table')
 let tablaVs = $("tablaVs");
@@ -18,15 +17,16 @@ let ulSingle = tag(tablaIntentos, "ul", 0);
 let ulVs = tag(tablaVs, "ul", 0);
 let ulContraR = tag(tablaContrarreloj, "ul", 0);
 var jugadores, numerosElegidosRival = new Array();
+let parrafosMensaje = document.getElementsByClassName("mensajeResultado")
+let countdown = $("reloj30secs")
 let numerosElegidos = [];
 let chances;
 let refresca;
 let textoNumerosElegidos;
 let tiempoInicial;
-let parrafosMensaje = document.getElementsByClassName("mensajeResultado")
-let countdown = $("reloj30secs")
 let modo;
 let intervalo;
+
 //#endregion
 
 
@@ -44,12 +44,17 @@ function empezarReloj() {
 function actualizarReloj() {
     if (tiempoInicial < 0 || isNaN(tiempoInicial)) {
         tiempoInicial = 'Fin.'
+        countdown.classList.remove("timeRunsOut")
         tuResultado(false, "Se te acabo el tiempo. ");
         clearInterval(intervalo)
         $("btnClock").disabled = true;
     } else
         tiempoInicial -= 0.01;
+    
+    
     (tiempoInicial > 0) ? countdown.innerHTML = tiempoInicial.toFixed(1) : countdown.innerHTML = "Fin"
+    if(tiempoInicial < 10.000)
+    countdown.classList.add("timeRunsOut")
 
 }
 
@@ -61,7 +66,7 @@ function ingresarNumeroContrarreloj() {
     if (numeroIngresado <= 50 && numeroIngresado > 0)
         (numeroIngresado == ganador) ? correctoReloj() : incorrectoReloj(numeroIngresado)
     else {
-        llamarToast("El número debe estar entre 1 y 50.","error")        
+        llamarToast("El número debe estar entre 1 y 50.")        
     }
     $("numerosElegidosClock").innerHTML = textoNumerosElegidos + [...numerosElegidos]
 }
@@ -97,9 +102,13 @@ function resetHTML(){
     for(let i = 0; i < document.getElementsByTagName("input").length;i++)
     tag(document,"input",i).innerHTML = "";
     for(let i = 0;i<document.getElementsByClassName("table-responsive-lg").length;i++){
-    document.getElementsByClassName("table-responsive-lg")[i].innerHTML = ""
+    tag(document.getElementsByClassName("table-responsive-lg")[i],"ul",0).textContent = ""
+    tag(document.getElementsByClassName("table-responsive-lg")[i],"h2",0).textContent = ""
     document.getElementsByClassName("table-responsive-lg")[i].classList.remove("border")
+    if(tag(document.getElementsByClassName("table-responsive-lg")[i],"table",0)!=undefined)
+    tag(document.getElementsByClassName("table-responsive-lg")[i],"table",0).textContent = ""    
     }
+    
     $("botonVs").disabled = false;
     $("btnClock").disabled = false;
     $("boton").disabled = false
@@ -125,10 +134,9 @@ $("btnSeccionContrarreloj").addEventListener("click", contrarreloj)
 function singlePlayer() {
     esconderSecciones()
     mostrarSeccion("s"+this.getAttribute("id").substring(4,this.length))
-    mostrarSeccion("backB")
-    ganador = 94
-    //Math.floor(Math.random() * 100) + 1;
-    console.log(ganador)
+    mostrarSeccion("backB")    
+    Math.floor(Math.random() * 100) + 1;
+    
     modo = "intentos"
 }
 
@@ -147,12 +155,22 @@ function vsBtn() {
     llamarApiUsuariosRandom()
     ganador = Math.floor(Math.random() * 20) + 1;
     modo = "victorias"
-    console.log(ganador)
+    
 }
 
 const volver = _ => volverInicioSwal()
 
 $("volver").addEventListener("click",volver)
+
+$("tuNumero").addEventListener("keyup",function (evt){
+    if (evt.key == "Escape")volver()
+})
+$("numero").addEventListener("keyup",function (evt){
+    if (evt.key == "Escape")volver()
+})
+$("numeroClock").addEventListener("keyup",function (evt){
+    if (evt.key == "Escape")volver()
+})
 
 
 
@@ -162,8 +180,7 @@ function contrarreloj() {
     mostrarSeccion("backB")
     ganador = Math.floor(Math.random() * 50) + 1;
     modo = "contrarreloj"
-    empezarReloj()
-    console.log(ganador)
+    empezarReloj()    
 }
 
 const crearTabla = () => tabla.innerHTML = `<thead><tr><th>Nombre</th><th>Email</th><th>Procedencia</th><th>${crearCabezal()}</th></tr></thead>`
@@ -177,14 +194,19 @@ function crearCabezal() {
 
 
 function crearLinks(top5) {
+    
     let li1 = document.createElement("li");
     (modo == "intentos") ? tablaIntentos.classList.add("border") : (modo == "contrarreloj") ? tablaContrarreloj.classList.add("border") : tablaVs.classList.add("border");
-    li1.textContent = "Ver todos"
+    li1.innerHTML = "Ver todos"
     let h2;
     let ul;
     (modo == "intentos") ? h2 = h2Single : (modo == "contrarreloj") ? h2 = h2ContraR : h2 = h2Vs;
     (modo == "intentos") ? ul = ulSingle : (modo == "contrarreloj") ? ul = ulContraR : ul = ulVs;
-
+    
+    let li2 = document.createElement("li");
+    li2.innerHTML = "Ver top 5"    
+    ul.appendChild(li1)
+    ul.appendChild(li2)    
     h2.innerHTML = "Top 5 Jugadores"
     li1.addEventListener("click", function () {
         h2.innerHTML = "Ganadores de hoy"
@@ -195,8 +217,6 @@ function crearLinks(top5) {
             rellenaTablaContraR(ordenarJugadores())
         else rellenaTablaVictorias(ordenarJugadores())
     })
-    let li2 = document.createElement("li");
-    li2.textContent = "Ver top 5"
     li2.addEventListener("click",
         function () {
             h2.innerHTML = "Top 5 jugadores"
@@ -208,8 +228,7 @@ function crearLinks(top5) {
             else rellenaTablaContraR(top5)
         })
 
-    ul.appendChild(li1)
-    ul.appendChild(li2)
+    
 }
 
 
@@ -222,13 +241,10 @@ const rellenaTablaVictorias = (j) => j.forEach(llenarVs)
 const rellenaTablaContraR = (j) => j.forEach(listarContraR)
 
 function mostrarIngreso(error, textoError) {
-
-    let tuNombre = "";
+    
     (modo == "intentos") ? parrafosMensaje[0].innerHTML = "" : (modo == "victorias") ? parrafosMensaje[1].innerHTML = "" : parrafosMensaje[2].innerHTML = "";
-
     let htmlForm = '<input class="swal2-input" type="text" id="txtNombre" placeholder="Como te llamas?">' + '<input class="swal2-input" type="text" id="txtProcedencia" placeholder="De donde sos?">' + '<input class="swal2-input" type="text" id="txtEmail" placeholder="Escribi tu correo"></input>';
     if (error) htmlForm += '<p style="color: red;">' + textoError + '</p>';
-
     (async () => {
         const { value: formValues } = await Swal.fire({
             title: "Ganaste! Ingresa tus datos",
@@ -236,26 +252,16 @@ function mostrarIngreso(error, textoError) {
             allowOutsideClick: false,
             html: htmlForm
         })
-
         if (formValues) {
             nombreJugador = $('txtNombre').value;
             procedenciaJugador = $('txtProcedencia').value,
                 emailJugador = $('txtEmail').value
-            consultarJugadorNuevo()
+            crearJugadorNuevo(true)
         }
     })()
-
-
 }
 
-
-
-
-
-
-
-
-function consultarJugadorNuevo() {
+function crearJugadorNuevo(victoria) {
     let mensajeError;
 
     if (nombreJugador == "" || !validarMail(emailJugador)) {
@@ -300,7 +306,8 @@ function consultarJugadorNuevo() {
         }
         sincronizarStorage();
       
-        tuResultado(true, `Felicidades ${jugadorNuevo.nombre}, ganaste el partido! `);
+        if(victoria)tuResultado(true, `Felicidades ${jugadorNuevo.nombre}, ganaste el partido! `);
+        
     }
 }
 
@@ -327,12 +334,14 @@ async function llamarApiUsuariosRandom(){
     
 
 function convertirUsuario(user){
-    console.log(user.results[0])
-     $("rivalNombre").innerHTML = user.results[0].name.first + " " + user.results[0].name.last;
-     $("rivalCorreo").innerHTML = user.results[0].email;
-     $("rivalProcedencia").innerHTML = user.results[0].location.city;
-    //("",user.results[0].picture.large)
-   $("rivalImagen").setAttribute("src",user.results[0].picture.large);
+    jugadorRival.nombre = user.results[0].name.first + " " + user.results[0].name.last
+    jugadorRival.email = user.results[0].email
+    jugadorRival.procedencia = user.results[0].location.city + ", " + user.results[0].location.country
+
+     $("rivalNombre").innerHTML = jugadorRival.nombre;
+     $("rivalCorreo").innerHTML = jugadorRival.email;
+     $("rivalProcedencia").innerHTML = jugadorRival.procedencia;    
+    $("rivalImagen").setAttribute("src",user.results[0].picture.large);
 }
 
 
@@ -386,9 +395,9 @@ function numeroIncorrecto(numero) {
     div.classList.remove("diverror")
     div.offsetWidth;
     div.classList.add("diverror")
-    if (modo == "intentos") div.onanimationend = () => llamarToast("Incorrecto, te quedan " + (chances - intentos) + " chances. Pista: " + pistaNumero(numero, chances - intentos),"pista")
-    else if (modo == "victorias") div.onanimationend = () => llamarToast("Sigan participando","pista")
-    else div.onanimationend = () => parrafosMensaje[2].innerHTML = llamarToast(pistaNumero(numero, 0),"pista")
+    if (modo == "intentos") div.onanimationend = () =>  parrafosMensaje[0].innerHTML = "Incorrecto, te quedan " + (chances - intentos) + " chances. Pista: " + pistaNumero(numero, chances - intentos)
+    else if (modo == "victorias") div.onanimationend = () => parrafosMensaje[1].innerHTML = "Sigan participando"
+    else div.onanimationend = () => parrafosMensaje[2].innerHTML = pistaNumero(numero, 0)
 
 
 }
@@ -403,7 +412,7 @@ function ingresarNumero() {
     let numero = Number($("numero").value);
     $("numero").value = "";
     if (numero > 100 || numero < 1) 
-        llamarToast("El número debe estar entre 1 y 100.","error")        
+        llamarToast("El número debe estar entre 1 y 100.")        
      else {
         numerosElegidos.push(numero)
         $("numerosElegidosIntentos").innerHTML = textoNumerosElegidos + [...numerosElegidos]
@@ -438,7 +447,7 @@ function ingresarNumeroVs() {
     let tuNumero = Number($("tuNumero").value);
     $("tuNumero").value = "";
     if (tuNumero > 20 || tuNumero < 1) 
-        llamarToast("El número debe estar entre 1 y 20.","error")        
+        llamarToast("El número debe estar entre 1 y 20.")        
      else {
         numerosElegidos.push(tuNumero)
         if (!Boolean(ganasteTu ^ ganoRival)) {
@@ -455,7 +464,14 @@ function ingresarNumeroVs() {
 
 
         if (Boolean(ganasteTu ^ ganoRival)) {
-            (ganasteTu) ? mostrarIngreso(false) : tuResultado(false, "Gano tu Rival. ", "victorias");
+            if(ganasteTu) mostrarIngreso(false)
+            if(!ganasteTu && ganoRival){                
+                nombreJugador = jugadorRival.nombre
+                emailJugador = jugadorRival.email
+                procedenciaJugador = jugadorRival.procedencia
+                crearJugadorNuevo(false)                
+                tuResultado(false, "Gano tu Rival. ", "victorias")
+            }
             $("botonVs").disabled = true;
         } else {
             (ganasteTu && ganoRival) ? reiniciarJuego() : numeroIncorrecto()
@@ -544,12 +560,11 @@ function pistaNumero(numero, chances) {
 
 const figuraEnTop5 = function (objeto, array) {
     let titulo = "";
-    (modo == "intentos") ? titulo = "Estas en primer lugar! Te recomendamos que jueges la quiniela." : (modo == "victorias") ? titulo = "Estas en primer lugar! Devolvenos la bola de cristal." : titulo = "Qué velocidad! Batiste el record. "
-
-    if (objeto.email == array[0].email) mostrarAlertSwal(titulo, true)
+    (modo == "intentos") ? titulo = "Estas en primer lugar! Te recomendamos que jueges la quiniela." : (modo == "victorias") ? titulo = "Estas en primer lugar! Devolvenos la bola de cristal." : titulo = "Qué velocidad! Batiste el record. "    
+    if (objeto.email == array[0].email) mostrarAlertSwal(titulo, true, objeto.nombre)
     for (let i = 1; i < array.length; i++)
         if (objeto == array[i]) {
-            mostrarAlertSwal('Estas en el top 5.', true);
+            mostrarAlertSwal('Estas en el top 5.', true, objeto.nombre);
             break
         }
 }
@@ -557,7 +572,7 @@ const figuraEnTop5 = function (objeto, array) {
 
 
 function tuResultado(victoria, texto) {
-    (victoria) ? $("body").classList.add("victoria") : mostrarAlertSwal(texto, false)
+    (victoria) ? $("body").classList.add("victoria") : mostrarAlertSwal(texto, false,nombreJugador)
     if (!victoria) $("body").classList.add("derrota")
     $("botonVs").disabled = true
     let posP;
@@ -575,7 +590,7 @@ function tuResultado(victoria, texto) {
         if (modo == "intentos") tablaIntentos.appendChild(tabla)
         else if (modo == "contrarreloj") tablaContrarreloj.appendChild(tabla)
         else tablaVs.appendChild(tabla);
-        figuraEnTop5(jugadorNuevo, top5)
+        if(victoria)figuraEnTop5(jugadorNuevo, top5)
         crearLinks(top5);
     } else {
         (modo == "intentos") ? parrafoListaVacia(tablaIntentos) : (modo == "victorias") ? parrafoListaVacia(tablaVs) : parrafoListaVacia(tablaContrarreloj);
@@ -598,8 +613,7 @@ function llamarFetch() {
 
             return respuesta.json()
         })
-        .then((respuesta) => { 
-            console.log(respuesta)
+        .then((respuesta) => {         
             chances = respuesta.chances
             textoNumerosElegidos= respuesta.textoNumerosElegidos
             refresca = respuesta.refresca
@@ -629,6 +643,7 @@ class Jugador {
 }
 
 let jugadorNuevo = new Jugador()
+let jugadorRival = new Jugador()
 //#endregion
 
 //#region localstorage

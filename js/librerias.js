@@ -4,7 +4,7 @@ export const $ = (id) => document.getElementById(id);
 
 export const tag = (el,tag,n) => el.getElementsByTagName(tag)[n];
 
-export function mostrarAlertSwal(texto, victoria) {
+export function mostrarAlertSwal(texto, victoria,nombreJugador) {
     let titulo;
     let imagen;
     if (victoria) {
@@ -21,30 +21,16 @@ export function mostrarAlertSwal(texto, victoria) {
     })
 }
 
-export function llamarToast(texto,finalidad){
-let duracion;
-let color1
-let color2
-if(finalidad=="pista"){
-color1 = "skyblue"
-color2 = "greenyellow"
-}else{
-color2 = "red"
-color1 = "darkred"
-}
-
-
-
-(finalidad=="pista")?duracion = 15000:duracion = 3000
- 
+export function llamarToast(texto){
 
     Toastify({
 
     text: texto,
-    duration: duracion,
+    duration: 5000,
+    close: true,
     position:"center",
     style: {
-        background: `linear-gradient(to right, ${color1}, ${color2})`,
+        background: `linear-gradient(to right, red, darkred)`,
       },
     
     }).showToast();
