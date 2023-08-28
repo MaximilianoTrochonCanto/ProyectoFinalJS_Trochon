@@ -27,6 +27,7 @@ let textoNumerosElegidos;
 let tiempoInicial;
 let modo;
 let intervalo;
+let partidoEnCurso;
 
 //#endregion
 
@@ -74,6 +75,7 @@ function ingresarNumeroContrarreloj() {
 
 function correctoReloj() {
     clearInterval(intervalo)
+    if(tiempoInicial > 0 && tiempoInicial < 10)countdown.classList.remove("timeRunsOut")
     mostrarIngreso(false);
 }
 
@@ -87,8 +89,11 @@ function incorrectoReloj(numeroIngresado) {
 export const inicio = function () {
     esconderSecciones()
     mostrarSeccion("main")    
-    numerosElegidosRival,numerosElegidos = []    
+    numerosElegidosRival = []
+    numerosElegidos = []    
     llamarFetch()    
+    ganoRival = false;
+    clearInterval(intervalo)
     $("backB").style.display = "none"
     
     resetHTML()
@@ -157,12 +162,15 @@ function vsBtn() {
     mostrarSeccion("backB")
     llamarApiUsuariosRandom()
     ganador = Math.floor(Math.random() * 20) + 1;
-     
+     console.log(ganador)
     modo = "victorias"
     
 }
 
-const volver = _ => volverInicioSwal()
+const volver =function (){
+    
+    (partidoEnCurso)?volverInicioSwal():inicio()
+}
 
 $("volver").addEventListener("click",volver)
 
@@ -331,7 +339,8 @@ async function getApi(){
     return data;
 }
 
-async function llamarApiUsuariosRandom(){
+async function llamarApiUsuariosRandom(){    
+    cargandoUsuario()
     const user = await getApi();
     convertirUsuario(user)
 }
@@ -349,6 +358,13 @@ function convertirUsuario(user){
     $("rivalImagen").setAttribute("src",user.results[0].picture.large);
 }
 
+
+function cargandoUsuario(){
+    $("rivalNombre").innerHTML = "Cargando..."
+    $("rivalCorreo").innerHTML = "Cargando..."
+    $("rivalProcedencia").innerHTML = "Cargando..."
+    $("rivalImagen").setAttribute("src",'./img/Loading_icon.gif')
+}
 
 function ordenarJugadores() {
     let jugadoresOrdenados;
@@ -448,24 +464,46 @@ $("numeroClock").addEventListener("keyup", function (evt) {
     if (evt.code == "Enter" && !$("btnClock").disabled) ingresarNumeroContrarreloj()
 })
 
+
+
 function ingresarNumeroVs() {
     let tuNumero = Number($("tuNumero").value);
     $("tuNumero").value = "";
     if (tuNumero > 20 || tuNumero < 1) 
         llamarToast("El número debe estar entre 1 y 20.")        
-     else {
-        numerosElegidos.push(tuNumero)
-        if (!Boolean(ganasteTu ^ ganoRival)) {
+     else {        
+        numerosElegidos.push(tuNumero)        
+        ganasteTu = consultarNumero(tuNumero)
+        numeroRival = Math.floor(Math.random() * 20) + 1;        
+        ganoRival = consultarNumero(numeroRival)        
+        
+            if(!ganoRival){
             while (!noEsta(numeroRival, numerosElegidosRival) || !noEsta(numeroRival, numerosElegidos)) {
-                numeroRival = Math.floor(Math.random() * 20) + 1;
+                numeroRival = Math.floor(Math.random() * 20) + 1;                      
             }
-            $("numerosElegidosVictoriasTu").innerHTML = textoNumerosElegidos + [numerosElegidos]
-            ganasteTu = consultarNumero(tuNumero)
-            ganoRival = consultarNumero(numeroRival)
+            
+                ganoRival = consultarNumero(numeroRival)            
+            }else{
+                if (Boolean(ganasteTu ^ ganoRival)){ 
+                if(ganasteTu) mostrarIngreso(false) 
+                else{
+                    nombreJugador = jugadorRival.nombre
+                    emailJugador = jugadorRival.email
+                    procedenciaJugador = jugadorRival.procedencia
+                    crearJugadorNuevo(false)                
+                    tuResultado(false, "Gano tu Rival. ", "victorias")
+                }
+                $("botonVs").disabled = true;
+                }else{
+                    (ganasteTu && ganoRival) ? reiniciarJuego() : numeroIncorrecto()        
+                }
+                    
+            }
+            $("numerosElegidosVictoriasTu").innerHTML = textoNumerosElegidos + [numerosElegidos]                        
             numerosElegidosRival.push(numeroRival)
             $("respuestaRival").innerHTML = ` ${[numerosElegidosRival]}`
-            //$("numerosElegidosVictoriasRival").innerHTML = textoNumerosElegidos + [...numerosElegidosRival]
-        }
+            // $("numerosElegidosVictoriasRival").innerHTML = textoNumerosElegidos + [...numerosElegidosRival]
+        //}
 
 
         if (Boolean(ganasteTu ^ ganoRival)) {
@@ -489,10 +527,10 @@ function ingresarNumeroVs() {
 
 function reiniciarJuego() {
     numerosElegidosRival = [];
-    $("numerosElegidosVictoriasTu").innerHTML = ""
-    $("numerosElegidosVictoriasRival").innerHTML = ""
-    ganador = Math.floor(Math.random() * 20) + 1;
-        
+    numerosElegidos = []
+    $("numerosElegidosVictoriasTu").innerHTML = ""   
+    $("respuestaRival").innerHTML = "" 
+    ganador = Math.floor(Math.random() * 20) + 1;    
     parrafosMensaje[1].innerHTML = "Empataron. Comiencen de nuevo!"
 
 }
@@ -578,6 +616,7 @@ const figuraEnTop5 = function (objeto, array) {
 
 
 function tuResultado(victoria, texto) {
+    partidoEnCurso = false;
     (victoria) ? $("body").classList.add("victoria") : mostrarAlertSwal(texto, false,nombreJugador)
     if (!victoria) $("body").classList.add("derrota")
     $("botonVs").disabled = true
@@ -624,6 +663,7 @@ function llamarFetch() {
             textoNumerosElegidos= respuesta.textoNumerosElegidos
             refresca = respuesta.refresca
             tiempoInicial = respuesta.tiempoInicial
+            partidoEnCurso = respuesta.partidoEnCurso
         })
         .catch((error) => console.log(error))
     
