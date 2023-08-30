@@ -161,8 +161,7 @@ function vsBtn() {
     mostrarSeccion("s"+this.getAttribute("id").substring(4,this.length))
     mostrarSeccion("backB")
     llamarApiUsuariosRandom()
-    ganador = Math.floor(Math.random() * 20) + 1;
-     console.log(ganador)
+    ganador = Math.floor(Math.random() * 20) + 1;     
     modo = "victorias"
     
 }
