@@ -279,11 +279,7 @@ function crearJugadorNuevo(victoria) {
 
     if (nombreJugador == "" || !validarMail(emailJugador)) {
         (nombreJugador == "") ? mensajeError = "El nombre y correo son obligatorios." : mensajeError = "Ingresa un correo valido por favor";
-        //     $("errorIngreso").classList.add("pError")
-        //     setTimeout(() => {
-        //         $("errorIngreso").classList.remove("pError");
-        //         $("errorIngreso").innerHTML = "";
-        //     }, 3000)
+      
         mostrarIngreso(true, mensajeError);
     } else {
         jugadorNuevo.nombre = nombreJugador;
@@ -334,7 +330,6 @@ function validarMail(email) {
 
 async function getApi(){
     const res = await fetch('https://randomuser.me/api/')
-    //const res = await fetch('https://pokeapi.co/api/v2/pokemon/')
     const data = res.json();
     return data;
 }
@@ -483,28 +478,13 @@ function ingresarNumeroVs() {
             }
             
                 ganoRival = consultarNumero(numeroRival)            
-            }else{
-                if (Boolean(ganasteTu ^ ganoRival)){ 
-                if(ganasteTu) mostrarIngreso(false) 
-                else{
-                    nombreJugador = jugadorRival.nombre
-                    emailJugador = jugadorRival.email
-                    procedenciaJugador = jugadorRival.procedencia
-                    crearJugadorNuevo(false)                
-                    tuResultado(false, "Gano tu Rival. ", "victorias")
-                }
-                $("botonVs").disabled = true;
-                }else{
-                    (ganasteTu && ganoRival) ? reiniciarJuego() : numeroIncorrecto()        
-                }
-                    
             }
+          
+            (ganasteTu && ganoRival) ? reiniciarJuego() : numeroIncorrecto()        
             $("numerosElegidosVictoriasTu").innerHTML = textoNumerosElegidos + [numerosElegidos]                        
             numerosElegidosRival.push(numeroRival)
             $("respuestaRival").innerHTML = ` ${[numerosElegidosRival]}`
-            // $("numerosElegidosVictoriasRival").innerHTML = textoNumerosElegidos + [...numerosElegidosRival]
-        //}
-
+          
 
         if (Boolean(ganasteTu ^ ganoRival)) {
             if(ganasteTu) mostrarIngreso(false)
@@ -524,6 +504,7 @@ function ingresarNumeroVs() {
     }
 
 }
+
 
 function reiniciarJuego() {
     numerosElegidosRival = [];
