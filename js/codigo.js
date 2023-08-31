@@ -192,7 +192,11 @@ function contrarreloj() {
     ganador = Math.floor(Math.random() * 50) + 1;
      
     modo = "contrarreloj"
-    empezarReloj()    
+    
+    setTimeout(function(){
+        empezarReloj()            
+    }
+    ,500)
 }
 
 const crearTabla = () => tabla.innerHTML = `<thead><tr><th>Nombre</th><th>Email</th><th>Procedencia</th><th>${crearCabezal()}</th></tr></thead>`
