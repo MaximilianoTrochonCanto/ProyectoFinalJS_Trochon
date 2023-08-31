@@ -189,6 +189,7 @@ function contrarreloj() {
     esconderSecciones()
     mostrarSeccion("s"+this.getAttribute("id").substring(4,this.length))
     mostrarSeccion("backB")
+    countdown.innerHTML = tiempoInicial;
     ganador = Math.floor(Math.random() * 50) + 1;
      
     modo = "contrarreloj"
