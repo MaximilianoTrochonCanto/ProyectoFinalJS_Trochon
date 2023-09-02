@@ -20,7 +20,7 @@
     </div>
     <main>
 
-        <section id="main" class="container">
+        <section id="main" class="row">
             <h1 class="mt-2">Adivina adivinador.</h1>
         <div class="tarjeta tarjeta-main row mt-5">
             <p class="col-12">Modos de Juego:</p>
@@ -51,7 +51,7 @@
             <input type="button" value="Ingresar" id="boton">
             <p id="numerosElegidosIntentos"></p>
         </div>  
-        <p class="mensajeResultado"></p>        
+        <p class="mensajeResultado col-9"></p>        
         <article class="table-responsive-lg" id="tablaIntentos">
             <ul></ul>
             <h2></h2>
@@ -62,25 +62,25 @@
        
         <h1>Quien adivine antes gana!</h1>
         <div class="tarjeta col-9">
-            <label for="tuNumero">Ingresa un numero del 1 al 20</label>
+            <label for="tuNumero" >Ingresa un numero del 1 al 20</label>
             <input type="number" id="tuNumero" >
             <input type="button" value="Ingresar" id="botonVs">
             <p id="numerosElegidosVictoriasTu"></p>        
         </div>
-        <div class="tarjeta" >
-            <article id="rival">
-                <div>
+        <div class="tarjeta col-9" >
+            <article  id="rival" class="row">
+                <div class="col-4">
                     <img src="" id="rivalImagen"> 
                 </div>
                 <div>
-                    <p> Nombre: <span id="rivalNombre"></span> </p>
-                    <p>Correo: <span id="rivalCorreo"></span></p>
-                    <p>Procedencia: <span id="rivalProcedencia"></span></p>
+                    <p class="col-6"> Nombre: <span id="rivalNombre"></span> </p>
+                    <p class="col-6">Correo: <span id="rivalCorreo"></span></p>
+                    <p class="col-6">Procedencia: <span id="rivalProcedencia"></span></p>
                 </div>
             </article>
             <p>Respuestas de tu rival: <span id="respuestaRival"></span></p>            
         </div>
-        <p class="mensajeResultado"></p>
+        <p class="mensajeResultado col-9"></p>
         <article class="table-responsive-lg" id="tablaVs">
             <ul></ul>
             <h2></h2>
@@ -96,7 +96,7 @@
             <input type="button" value="Ingresar" id="btnClock">            
             <p id="numerosElegidosClock"></p>
         </div>
-        <p class="mensajeResultado"></p>
+        <p class="mensajeResultado col-9"></p>
         <article class="table-responsive-lg" id="tablaTiempo">
             <ul></ul>
             <h2></h2>
